@@ -26,13 +26,13 @@ async function handle() {
   await asyncForEach(require(__dirname + "/config/mirrors"), async (url) => {
     let remote_flag = true;
     try {
-      //if (url.substr(0, 26) == "https://mirrorz.org/static") {
-      //  // /static 为本地的，直接读文件
-      //  let url_local = url.replace("https://mirrorz.org", "/..");
-      //  console.log("hit local file", `${url_local}`);
-      //  sites.push(require(`${__dirname}${url_local}`));
-      //  remote_flag = false;
-      //}
+      if (url.substr(0, 39) == "https://mirrorz.org/static/json/legacy/") {
+        // /static 为本地的，直接读文件
+        let url_local = url.replace("https://mirrorz.org/static/json/legacy/", "./json-legacy/");
+        console.log("hit local file", `${url_local}`);
+        sites.push(require(`${__dirname}/${url_local}`));
+        remote_flag = false;
+      }
     } catch (error) {
       // 这里没有用 .error 怕整个 CI 炸
       console.warn("hit error", url);

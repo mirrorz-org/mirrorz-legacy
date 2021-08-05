@@ -1,4 +1,5 @@
 /node_modules
 /dist
-config
 head.pug
+config
+json-legacy
