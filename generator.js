@@ -10,15 +10,16 @@ let isolist_category = [];
 let mlist = [];
 let mlist_name = [];
 let sites = [];
-// 写 头 这里直接借了 react 版编译好的 css / svg
+// 写 头 这里直接借了 react 版编译好（如果编译了的话）的 css / svg
 let head = fs.readFileSync(__dirname + "/template/head.pug.tempest");
-//fs.readdirSync(__dirname + "/../dist/").map((f) => {
-//  if (f.includes(".css")) {
-//    head += `  link(rel='stylesheet', href='/${f}')\n`;
-//  } else if (f.includes(".svg")) {
-//    head += `  link(rel='icon', type='image/svg+xml', href='/${f}')\n`;
-//  }
-//});
+if (fs.existsSync(__dirname + "/mirrorz/dist"))
+  fs.readdirSync(__dirname + "/mirrorz/dist/").map((f) => {
+    if (f.includes(".css")) {
+      head += `  link(rel='stylesheet', href='/${f}')\n`;
+    } else if (f.includes(".svg")) {
+      head += `  link(rel='icon', type='image/svg+xml', href='/${f}')\n`;
+    }
+  });
 fs.writeFileSync(__dirname + "/template/head.pug", head);
 handle();
 async function handle() {
