@@ -12,27 +12,27 @@ let mlist_name = [];
 let sites = [];
 // 写 头 这里直接借了 react 版编译好的 css / svg
 let head = fs.readFileSync(__dirname + "/template/head.pug.tempest");
-fs.readdirSync(__dirname + "/../dist/").map((f) => {
-  if (f.includes(".css")) {
-    head += `  link(rel='stylesheet', href='/${f}')\n`;
-  } else if (f.includes(".svg")) {
-    head += `  link(rel='icon', type='image/svg+xml', href='/${f}')\n`;
-  }
-});
+//fs.readdirSync(__dirname + "/../dist/").map((f) => {
+//  if (f.includes(".css")) {
+//    head += `  link(rel='stylesheet', href='/${f}')\n`;
+//  } else if (f.includes(".svg")) {
+//    head += `  link(rel='icon', type='image/svg+xml', href='/${f}')\n`;
+//  }
+//});
 fs.writeFileSync(__dirname + "/template/head.pug", head);
 handle();
 async function handle() {
   // 这里可能会下载失败，可能要再改改
-  await asyncForEach(require("../src/config/mirrors"), async (url) => {
+  await asyncForEach(require(__dirname + "/config/mirrors"), async (url) => {
     let remote_flag = true;
     try {
-      if (url.substr(0, 26) == "https://mirrorz.org/static") {
-        // /static 为本地的，直接读文件
-        let url_local = url.replace("https://mirrorz.org", "/..");
-        console.log("hit local file", `${url_local}`);
-        sites.push(require(`${__dirname}${url_local}`));
-        remote_flag = false;
-      }
+      //if (url.substr(0, 26) == "https://mirrorz.org/static") {
+      //  // /static 为本地的，直接读文件
+      //  let url_local = url.replace("https://mirrorz.org", "/..");
+      //  console.log("hit local file", `${url_local}`);
+      //  sites.push(require(`${__dirname}${url_local}`));
+      //  remote_flag = false;
+      //}
     } catch (error) {
       // 这里没有用 .error 怕整个 CI 炸
       console.warn("hit error", url);
@@ -104,7 +104,7 @@ async function handle() {
     data = data.sort((a, b) => a.abbr.localeCompare(b.abbr));
     let category = isolist_category[id];
     let name = isolist_name[id];
-    let html = pug.compileFile("./legacy/template/iso_content.pug")({
+    let html = pug.compileFile(__dirname + "/template/iso_content.pug")({
       sidebar: isolist_name
         .map((n) => {
           let tid = isolist_name.indexOf(n);
@@ -126,14 +126,14 @@ async function handle() {
       data: data,
     });
     wf(
-      `../dist/_/${isolist_category[id]}/${name.replace(/ /gi, "")}/index.html`,
+      `dist/_/${isolist_category[id]}/${name.replace(/ /gi, "")}/index.html`,
       html
     );
   });
   // 生成 /list
   wf(
-    `../dist/_/list/index.html`,
-    pug.compileFile("./legacy/template/list_index.pug")({
+    `dist/_/list/index.html`,
+    pug.compileFile(__dirname + "/template/list_index.pug")({
       data: mlist_name
         .map((m) => {
           return {
@@ -147,7 +147,7 @@ async function handle() {
   // 上面的 ; 是一定要的 不然会报错（（（
   // 生成 /os /app /font /
   ["font", "app", "os"].forEach((category) => {
-    let html = pug.compileFile("./legacy/template/iso_index.pug")({
+    let html = pug.compileFile(__dirname + "/template/iso_index.pug")({
       sidebar: isolist_name
         .map((n) => {
           let tid = isolist_name.indexOf(n);
@@ -165,22 +165,22 @@ async function handle() {
         .sort((a, b) => a.name.localeCompare(b.name)),
       navbar_active: category,
     });
-    wf(`../dist/_/${category}/index.html`, html);
-    wf(`../dist/_/index.html`, html);
+    wf(`dist/_/${category}/index.html`, html);
+    wf(`dist/_/index.html`, html);
   });
   // /list/:name
   mlist.forEach((data, id) => {
     let name = mlist_name[id];
-    let html = pug.compileFile("./legacy/template/list_content.pug")({
+    let html = pug.compileFile(__dirname + "/template/list_content.pug")({
       name: name,
       data: data.sort((a, b) => a.site.abbr.localeCompare(b.site.abbr)),
     });
-    wf(`../dist/_/list/${name.replace(/ /gi, "")}/index.html`, html);
+    wf(`dist/_/list/${name.replace(/ /gi, "")}/index.html`, html);
   });
   sites
     .sort((a, b) => b.site.abbr.localeCompare(a.site.abbr))
     .forEach((data) => {
-      let html = pug.compileFile("./legacy/template/site.pug")({
+      let html = pug.compileFile(__dirname + "/template/site.pug")({
         data: data,
         sidebar: sites
           .map((n) => {
@@ -194,12 +194,12 @@ async function handle() {
           .sort((a, b) => a.abbr.localeCompare(b.abbr)),
       });
       // 目前 BFSU 在 MirrorZ 中是排最前的 所以就钦定你是 /site 首页了
-      wf(`../dist/_/site/index.html`, html);
-      wf(`../dist/_/site/${data.site.abbr}/index.html`, html);
+      wf(`dist/_/site/index.html`, html);
+      wf(`dist/_/site/${data.site.abbr}/index.html`, html);
     });
   wf(
-    `../dist/_/about/index.html`,
-    pug.compileFile("./legacy/template/about.pug")({
+    `dist/_/about/index.html`,
+    pug.compileFile(__dirname + "/template/about.pug")({
       sites: sites.sort((a, b) => a.site.abbr.localeCompare(b.site.abbr)),
     })
   );
