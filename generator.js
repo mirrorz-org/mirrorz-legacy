@@ -24,30 +24,31 @@ if (fs.existsSync(__dirname + "/mirrorz/dist")){
 fs.writeFileSync(__dirname + "/template/head.pug", head);
 handle();
 async function handle() {
-  // 这里可能会下载失败，可能要再改改
-  await asyncForEach(require(__dirname + "/config/mirrors"), async (url) => {
-    let remote_flag = true;
+  const config = require(__dirname + "/config.json");
+  config.mirrors_legacy.forEach((abbr) => {
     try {
-      if (url.substr(0, 39) == "https://mirrorz.org/static/json/legacy/") {
-        // /static 为本地的，直接读文件
-        let url_local = url.replace("https://mirrorz.org/static/json/legacy/", "./json-legacy/");
-        console.log("hit local file", `${url_local}`);
-        sites.push(require(`${__dirname}/${url_local}`));
-        remote_flag = false;
-      }
-    } catch (error) {
-      // 这里没有用 .error 怕整个 CI 炸
-      console.warn("hit error", url);
-    }
-    if (remote_flag) {
-      let data = await download_file(url)
-      if (data == "e") {
-        console.warn("download error", url);
-      } else {
-        sites.push(data);
-      }
+      console.log("hit local file", `${abbr}`);
+      sites.push(require(`${__dirname}/json-legacy/${abbr}.json`));
+    } catch (err) {
+      // 这里没有用 .error 怕整个 CI 炸
+      console.warn("hit error", abbr);
     }
   });
+  for (const url in config.mirrors) {
+    let data = await download_file(url)
+    if (data == "e") {
+      console.warn("download error", url);
+      try {
+        console.log("hit local fallback file", `${url}`);
+        sites.push(require(`${__dirname}/json-legacy/${config.mirrors[url]}.json`));
+      } catch (err) {
+        // 这里没有用 .error 怕整个 CI 炸
+        console.warn("hit local fallback error", url);
+      }
+    } else {
+      sites.push(data);
+    }
+  }
   sites.forEach((s, sid) => {
     // 补全 / （后面发现不用补）
     let base_url = s.site.url; // + (s.site.url.substr(-1,1) !== '/' ? '/' : '')
@@ -237,7 +238,7 @@ async function download_file(url, try_time = 0) {
     return await data.json();
   } catch (error) {
     console.warn("download error", try_time, url);
-    if (try_time > 5) {
+    if (try_time > 0) {
       return "e";
     }
     return download_file(url.replace("sss", ""), try_time + 1);

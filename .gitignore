@@ -2,6 +2,7 @@
 /dist
 head.pug
 config
+config.json
 json-legacy
 mirrorz
 yarn-error.log
