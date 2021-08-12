@@ -2,11 +2,6 @@ const pug = require("pug");
 const fs = require("fs");
 const fetch = require("node-fetch");
 
-// 猜文件夹结构
-console.log(fs.readdirSync('./'))
-console.log(fs.readdirSync('../'))
-console.log(fs.readdirSync('../..'))
-
 // 这里 isolist 与 isolist_name 形成对应关系 假设 isolist[0] 是 Arch Linux 发行版内容 isolist_name[0] 就是 Arch Linux
 let isolist = [];
 let isolist_name = [];
@@ -17,8 +12,8 @@ let mlist_name = [];
 let sites = [];
 // 写 头 这里直接借了 react 版编译好（如果编译了的话）的 css / svg
 let head = fs.readFileSync(__dirname + "/template/head.pug.tempest");
-if (fs.existsSync(__dirname + "/../dist")){
-  fs.readdirSync(__dirname + "/../dist/").map((f) => {
+if (fs.existsSync(__dirname + "/mirrorz/dist")){
+  fs.readdirSync(__dirname + "/mirrorz/dist/").map((f) => {
     if (f.includes(".css")) {
       head += `  link(rel='stylesheet', href='/${f}')\n`;
     } else if (f.includes(".svg")) {
@@ -214,7 +209,7 @@ async function handle() {
 // 随便写的垃圾函数 其实应该 import 个 path 处理 subpath
 // wf -> write file
 function wf(path, data) {
-  console.log("w", path.replace("..", "/_"));
+  console.log("w", path.replace("dist", "/_"));
   let subpath = path.split("/");
   delete subpath[subpath.length - 1];
   subpath = __dirname + "/" + subpath.join("/");
