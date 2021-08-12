@@ -2,6 +2,8 @@ const pug = require("pug");
 const fs = require("fs");
 const fetch = require("node-fetch");
 
+const config = require(__dirname + "/config.json");
+
 // 这里 isolist 与 isolist_name 形成对应关系 假设 isolist[0] 是 Arch Linux 发行版内容 isolist_name[0] 就是 Arch Linux
 let isolist = [];
 let isolist_name = [];
@@ -22,9 +24,45 @@ if (fs.existsSync(__dirname + "/mirrorz/dist")){
   });
 }
 fs.writeFileSync(__dirname + "/template/head.pug", head);
+// 写 about
+let about = fs.readFileSync(__dirname + "/template/about.pug.pre");
+about += `
+                li ${config.url}/_/
+                li ${config.url}/_/os/ArchLinux
+                li ${config.url}/_/app/Git
+                li ${config.url}/_/font
+                li ${config.url}/_/list
+                li ${config.url}/_/list/pypi
+                li ${config.url}/_/site
+                li ${config.url}/_/site/BFSU
+                li ${config.url}/_/about
+`
+if (config.about.includes("oh-my-mirrorz")) {
+  about += `
+                li Use the below script for speed test!
+                li ${config.url}/oh-my-mirrorz.py
+                li
+                    code curl ${config.url}/oh-my-mirrorz.py | python3
+`
+}
+if (config.about.includes("302-js")) {
+  about += `
+                li Experimental Feature: 302 Backend
+                li https://mirrors.mirrorz.org/archlinux
+                li https://m.mirrorz.org/centos
+`
+}
+if (config.about.includes("search")) {
+  about += `
+                li Experimental Feature: Search Backend
+                li https://search.mirrorz.org/archlinux/
+                li https://s.mirrorz.org/openwrt/snapshots/targets/zynq/generic/sha256sums
+`
+}
+about += fs.readFileSync(__dirname + "/template/about.pug.post");
+fs.writeFileSync(__dirname + "/template/about.pug", about);
 handle();
 async function handle() {
-  const config = require(__dirname + "/config.json");
   config.mirrors_legacy.forEach((abbr) => {
     try {
       console.log("hit local file", `${abbr}`);

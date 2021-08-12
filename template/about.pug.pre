@@ -1,0 +1,47 @@
+doctype html
+html
+  include head.pug
+  body
+    #app-container
+      .sidebar
+        a(href='/_/')
+          img.sidebar-logo(src='/static/img/mirrorz.svg',alt='ISO')
+        a(href='/_/list')
+          h2 List
+        a(href='/_/site')
+          h2 Site
+        a.active(aria-current='page',href='/_/about')
+          h2 About
+      main
+        .about
+          .para
+            .para-title
+              .para-title-icon #
+              .para-title-text Intro
+            .para-content
+              div
+                p Your next MirrorS is not MirrorS, nor MirrorSes, it's MirrorZ.
+                p A final site for Mirror sites.
+          .para
+            .para-title
+              .para-title-icon #
+              .para-title-text Repo
+            .para-content
+              a(href='https://github.com/tuna/mirrorz', target='_blank') https://github.com/tuna/mirrorz
+          .para
+            .para-title
+              .para-title-icon #
+              .para-title-text Logo
+            .para-content
+              each d in sites
+                .about-powered-by
+                  if(d.site.logo)
+                    img.about-logo(src=(d.site.logo ? d.site.logo : ''), alt='logo')
+                  = d.site.abbr
+          .para
+            .para-title
+              .para-title-icon #
+              .para-title-text Usage
+            .para-content
+              ul
+                li The following urls are all valid.
