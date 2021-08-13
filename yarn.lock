@@ -12,6 +12,13 @@
   resolved "https://registry.nlark.com/@babel/parser/download/@babel/parser-7.15.0.tgz#b6d6e29058ca369127b0eeca2a1c4b5794f1b6b9"
   integrity sha1-ttbikFjKNpEnsO7KKhxLV5Txtrk=
 
+"@babel/runtime@^7.12.0":
+  version "7.15.3"
+  resolved "https://registry.nlark.com/@babel/runtime/download/@babel/runtime-7.15.3.tgz?cache=0&sync_timestamp=1628666503436&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.15.3.tgz#2e1c2880ca118e5b2f9988322bd8a7656a32502b"
+  integrity sha1-LhwogMoRjlsvmYgyK9inZWoyUCs=
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/types@^7.6.1", "@babel/types@^7.9.6":
   version "7.15.0"
   resolved "https://registry.nlark.com/@babel/types/download/@babel/types-7.15.0.tgz#61af11f2286c4e9c69ca8deb5f4375a73c72dcbd"
@@ -95,6 +102,13 @@ has@^1.0.3:
   integrity sha1-ci18v8H2qoJB8W3YFOAR4fQeh5Y=
   dependencies:
     function-bind "^1.1.1"
+
+i18next@^20.4.0:
+  version "20.4.0"
+  resolved "https://registry.nlark.com/i18next/download/i18next-20.4.0.tgz?cache=0&sync_timestamp=1628587892572&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fi18next%2Fdownload%2Fi18next-20.4.0.tgz#6897229a7898e23f3c4885f10315c978b594d3b9"
+  integrity sha1-aJcimniY4j88SIXxAxXJeLWU07k=
+  dependencies:
+    "@babel/runtime" "^7.12.0"
 
 is-core-module@^2.2.0:
   version "2.5.0"
@@ -261,6 +275,11 @@ pug@^3.0.2:
     pug-parser "^6.0.0"
     pug-runtime "^3.0.1"
     pug-strip-comments "^2.0.0"
+
+regenerator-runtime@^0.13.4:
+  version "0.13.9"
+  resolved "https://registry.nlark.com/regenerator-runtime/download/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
+  integrity sha1-iSV0Kpj/2QgUmI11Zq0wyjsmO1I=
 
 resolve@^1.15.1:
   version "1.20.0"

@@ -1,8 +1,22 @@
 const pug = require("pug");
 const fs = require("fs");
 const fetch = require("node-fetch");
+const i18n = require("i18next");
 
 const config = require(__dirname + "/config.json");
+
+const resources = {
+  en: { translation: require(__dirname + "/i18n/en.json") },
+  zh: { translation: require(__dirname + "/i18n/zh.json") },
+};
+i18n
+  .init({
+    resources,
+    lng: config.language ?? "en",
+    interpolation: {
+      escapeValue: false // no user input hence "safe". Use with care
+    }
+  });
 
 // 这里 isolist 与 isolist_name 形成对应关系 假设 isolist[0] 是 Arch Linux 发行版内容 isolist_name[0] 就是 Arch Linux
 let isolist = [];
@@ -14,6 +28,7 @@ let mlist_name = [];
 let sites = [];
 // 写 头 这里直接借了 react 版编译好（如果编译了的话）的 css / svg
 let head = fs.readFileSync(__dirname + "/template/head.pug.tempest");
+head += `  title ${config.display_legacy}\n` // include head.pug would not pass `config` into it
 if (fs.existsSync(__dirname + "/mirrorz/dist")){
   fs.readdirSync(__dirname + "/mirrorz/dist/").map((f) => {
     if (f.includes(".css")) {
@@ -39,7 +54,7 @@ about += `
 `
 if (config.about.includes("oh-my-mirrorz")) {
   about += `
-                li Use the below script for speed test!
+                li= i18n.t("about.speedtest")
                 li ${config.url}/oh-my-mirrorz.py
                 li
                     code curl ${config.url}/oh-my-mirrorz.py | python3
@@ -47,14 +62,14 @@ if (config.about.includes("oh-my-mirrorz")) {
 }
 if (config.about.includes("302-js")) {
   about += `
-                li Experimental Feature: 302 Backend
+                li= i18n.t("about.302_js")
                 li https://mirrors.mirrorz.org/archlinux
                 li https://m.mirrorz.org/centos
 `
 }
 if (config.about.includes("search")) {
   about += `
-                li Experimental Feature: Search Backend
+                li= i18n.t("about.search")
                 li https://search.mirrorz.org/archlinux/
                 li https://s.mirrorz.org/openwrt/snapshots/targets/zynq/generic/sha256sums
 `
@@ -165,6 +180,7 @@ async function handle() {
       navbar_active: isolist_category[id],
       distro_name: name,
       data: data,
+      i18n: i18n,
     });
     wf(
       `dist/_/${isolist_category[id]}/${name.replace(/ /gi, "")}/index.html`,
@@ -183,6 +199,7 @@ async function handle() {
           };
         })
         .sort((a, b) => a.name.localeCompare(b.name)),
+      i18n: i18n,
     })
   );
   // 上面的 ; 是一定要的 不然会报错（（（
@@ -205,6 +222,7 @@ async function handle() {
         })
         .sort((a, b) => a.name.localeCompare(b.name)),
       navbar_active: category,
+      i18n: i18n,
     });
     wf(`dist/_/${category}/index.html`, html);
     wf(`dist/_/index.html`, html);
@@ -233,6 +251,7 @@ async function handle() {
             };
           })
           .sort((a, b) => a.abbr.localeCompare(b.abbr)),
+        i18n: i18n,
       });
       // 目前 BFSU 在 MirrorZ 中是排最前的 所以就钦定你是 /site 首页了
       wf(`dist/_/site/index.html`, html);
@@ -242,6 +261,7 @@ async function handle() {
     `dist/_/about/index.html`,
     pug.compileFile(__dirname + "/template/about.pug")({
       sites: sites.sort((a, b) => a.site.abbr.localeCompare(b.site.abbr)),
+      i18n: i18n,
     })
   );
 }

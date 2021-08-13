@@ -7,17 +7,17 @@ html
         a(href='/_/')
           img.sidebar-logo(src='/static/img/mirrorz.svg',alt='ISO')
         a(href='/_/list')
-          h2 List
+          h2!= i18n.t("list.list")
         a(href='/_/site')
-          h2 Site
+          h2!= i18n.t("site.site")
         a.active(aria-current='page',href='/_/about')
-          h2 About
+          h2= i18n.t("about.about")
       main
         .about
           .para
             .para-title
               .para-title-icon #
-              .para-title-text Intro
+              .para-title-text= i18n.t("about.intro")
             .para-content
               div
                 p Your next MirrorS is not MirrorS, nor MirrorSes, it's MirrorZ.
@@ -25,13 +25,13 @@ html
           .para
             .para-title
               .para-title-icon #
-              .para-title-text Repo
+              .para-title-text= i18n.t("about.repo")
             .para-content
               a(href='https://github.com/tuna/mirrorz', target='_blank') https://github.com/tuna/mirrorz
           .para
             .para-title
               .para-title-icon #
-              .para-title-text Logo
+              .para-title-text= i18n.t("about.logo")
             .para-content
               each d in sites
                 .about-powered-by
@@ -41,7 +41,7 @@ html
           .para
             .para-title
               .para-title-icon #
-              .para-title-text Usage
+              .para-title-text= i18n.t("about.usage")
             .para-content
               ul
-                li The following urls are all valid.
+                li= i18n.t("about.valid_urls")

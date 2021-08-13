@@ -1,7 +1,7 @@
           .para
             .para-title
               .para-title-icon #
-              .para-title-text TODO and possible projects
+              .para-title-text= i18n.t("about.todo")
             .para-content
               ul
                 li More participating mirrors

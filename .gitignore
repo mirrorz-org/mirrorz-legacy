@@ -6,4 +6,5 @@ config
 config.json
 json-legacy
 mirrorz
+i18n
 yarn-error.log
