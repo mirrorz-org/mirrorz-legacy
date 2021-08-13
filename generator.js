@@ -1,22 +1,9 @@
 const pug = require("pug");
 const fs = require("fs");
 const fetch = require("node-fetch");
-const i18n = require("i18next");
+const i18n = require("./i18n/");
 
 const config = require(__dirname + "/config.json");
-
-const resources = {
-  en: { translation: require(__dirname + "/i18n/en.json") },
-  zh: { translation: require(__dirname + "/i18n/zh.json") },
-};
-i18n
-  .init({
-    resources,
-    lng: config.language ?? "en",
-    interpolation: {
-      escapeValue: false // no user input hence "safe". Use with care
-    }
-  });
 
 // 这里 isolist 与 isolist_name 形成对应关系 假设 isolist[0] 是 Arch Linux 发行版内容 isolist_name[0] 就是 Arch Linux
 let isolist = [];
