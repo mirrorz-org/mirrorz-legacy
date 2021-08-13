@@ -292,7 +292,7 @@ async function asyncForEach(array, callback) {
 async function download_file(url, try_time = 0) {
   try {
     console.log("downloading", try_time, url);
-    let data = await fetch(url, { timeout: 15000 });
+    let data = await fetch(url, { timeout: 1000 });
     return await data.json();
   } catch (error) {
     console.warn("download error", try_time, url);
