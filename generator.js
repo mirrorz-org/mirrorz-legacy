@@ -233,6 +233,7 @@ async function handle() {
     let html = pug.compileFile(__dirname + "/template/list_content.pug")({
       name: name,
       data: data.sort((a, b) => a.site.abbr.localeCompare(b.site.abbr)),
+      i18n: i18n,
     });
     wf(`dist/_/list/${name.replace(/ /gi, "")}/index.html`, html);
   });

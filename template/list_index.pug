@@ -7,11 +7,11 @@ html
         a(href='/_/')
           img.sidebar-logo(src='/static/img/mirrorz.svg',alt='ISO')
         a.active(aria-current='page',href='/_/list')
-          h2 List
+          h2!= i18n.t("list.list")
         a(href='/_/site')
-          h2 Site
+          h2!= i18n.t("site.site")
         a(href='/_/about')
-          h2 About
+          h2= i18n.t("about.about")
       main
         .mirrorz
           .mirrors
