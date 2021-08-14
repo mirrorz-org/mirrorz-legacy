@@ -74,13 +74,14 @@ async function handle() {
       console.warn("hit error", abbr);
     }
   });
-  for (const url in config.mirrors) {
+  for (const abbr in config.mirrors) {
+    const url = config.mirrors[abbr];
     let data = await download_file(url)
     if (data == "e") {
       console.warn("download error", url);
       try {
         console.log("hit local fallback file", `${url}`);
-        sites.push(require(`${__dirname}/json-legacy/${config.mirrors[url]}.json`));
+        sites.push(require(`${__dirname}/json-legacy/${abbr}.json`));
       } catch (err) {
         // 这里没有用 .error 怕整个 CI 炸
         console.warn("hit local fallback error", url);
