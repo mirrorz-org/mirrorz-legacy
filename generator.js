@@ -281,7 +281,12 @@ async function asyncForEach(array, callback) {
 async function download_file(url, try_time = 0) {
   try {
     console.log("downloading", try_time, url);
-    let data = await fetch(url, { timeout: 1000 });
+    let data = await fetch(url, {
+      timeout: 1000,
+      headers: {
+        'User-Agent': `mirrorz-legacy/1.0 (+https://github.com/mirrorz-org/mirrorz-legacy) ${config.url}`,
+      },
+    });
     return await data.json();
   } catch (error) {
     console.warn("download error", try_time, url);
