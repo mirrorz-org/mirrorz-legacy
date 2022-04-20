@@ -94,7 +94,8 @@ async function handle() {
     // 补全 / （后面发现不用补）
     let base_url = s.site.url; // + (s.site.url.substr(-1,1) !== '/' ? '/' : '')
     // 安排 /iso
-    s.info.forEach((info) => {
+    let info = s.info ?? [];
+    info.forEach((info) => {
       let i = isolist_name.indexOf(info.distro);
       if (!isolist_name.includes(info.distro)) {
         i = isolist_name.length;
